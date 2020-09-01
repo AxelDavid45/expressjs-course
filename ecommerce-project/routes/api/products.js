@@ -1,14 +1,13 @@
-"use strict"
-const express = require("express")
+'use strict'
+const express = require('express')
 const router = express.Router()
-const ProductsService = require("../../services/productsService")
+const ProductsService = require('../../services/productServiceInjection')
 
-const productService = new ProductsService()
-
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const { tags } = req.query
-    const products = await productService.getProducts({ tags })
+    console.log('tags', req.query)
+    const products = await ProductsService.getProducts({ tags })
     res.status(200).json({
       data: products,
     })
@@ -17,10 +16,10 @@ router.get("/", async (req, res, next) => {
   }
 })
 
-router.get("/:productId", async (req, res, next) => {
+router.get('/:productId', async (req, res, next) => {
   try {
     const { productId } = req.params
-    const product = await productService.getProducts({ productId })
+    const product = await ProductsService.getProducts({ productId })
     res.status(200).json({
       data: product,
     })
@@ -29,10 +28,10 @@ router.get("/:productId", async (req, res, next) => {
   }
 })
 
-router.post("/", async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   try {
     const { body: product } = req
-    const productCreated = await productService.createProduct({ product })
+    const productCreated = await ProductsService.createProduct({ product })
     res.status(201).json({
       data: productCreated,
     })
@@ -41,12 +40,12 @@ router.post("/", async (req, res, next) => {
   }
 })
 
-router.put("/:productId", async (req, res, next) => {
+router.put('/:productId', async (req, res, next) => {
   try {
     const { productId } = req.params
     const { body: productData } = req.body
 
-    const productUpdated = await productService.updateProduct({
+    const productUpdated = await ProductsService.updateProduct({
       productId,
       productData,
     })
@@ -59,10 +58,10 @@ router.put("/:productId", async (req, res, next) => {
   }
 })
 
-router.delete("/:productId", async (req, res, next) => {
+router.delete('/:productId', async (req, res, next) => {
   try {
     const { productId } = req.params
-    const productDeleted = await productService.deleteProduct({ productId })
+    const productDeleted = await ProductsService.deleteProduct({ productId })
     res.status(200).json({
       data: productDeleted,
     })

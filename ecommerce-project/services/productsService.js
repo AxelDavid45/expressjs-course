@@ -1,27 +1,30 @@
 'use strict'
-const productsMock = require('../utils/mocks/products')
 
 class ProductsService {
-  constructor () {}
-
-  async getProducts ({ tags }) {
-    return productsMock.all
+  constructor(store) {
+    this.collection = 'products'
+    this.store = store
   }
 
-  async getProduct ({ productId }) {
-    return productsMock.filterById(productId)
+  async getProducts({ tags }) {
+    const query = tags && { tags: { $in: tags } }
+    return this.store.getAll(this.collection, query)
   }
 
-  async createProduct ({ productData }) {
-    return productsMock.all[0]
+  async getProduct({ productId }) {
+    return await this.store.get(this.collection, productId)
   }
 
-  async updateProduct ({ productId, productData }) {
-    return productsMock.all[0]
+  async createProduct({ productData }) {
+    return await this.store.create(this.collection, productData)
   }
 
-  async deleteProduct (productId) {
-    return productsMock.filterById(productId)
+  async updateProduct({ productId, productData }) {
+    return await this.store.update(this.collection, productId, productData)
+  }
+
+  async deleteProduct({ productId }) {
+    return this.store.delete(this.collection, productId)
   }
 }
 
