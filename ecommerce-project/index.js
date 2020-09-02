@@ -19,6 +19,9 @@ app.set('views', join(__dirname, 'views'))
 app.set('view engine', 'pug')
 
 // Routes
+app.get('/', (req, res) => {
+  res.redirect('/products')
+})
 app.use('/products', productsRoutes)
 app.use('/api/products', productApiRoutes)
 
