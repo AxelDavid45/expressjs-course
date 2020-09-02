@@ -5,43 +5,44 @@ const MONGO_URI = `mongodb+srv://${db.user}:${db.password}@${db.host}/${db.name}
 
 class MongoLib {
   constructor() {
-    this.client = new MongoClient(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    this.connection = null
+    this.client = new MongoClient(MONGO_URI, { useUnifiedTopology: true })
   }
 
   async connect() {
-    await this.client.connect()
-    console.log('Connected to db')
-    return await this.client.db(db.name)
+    if (!this.connection) {
+      await this.client.connect()
+      console.log('Connected to db')
+      this.connection = await this.client.db(db.name)
+    }
+    return this.connection
   }
 
   async getAll(collection, query) {
-    const db = await this.connect()
-    return db.collection(collection).find(query).toArray()
+    await this.connect()
+    return this.connection.collection(collection).find(query).toArray()
   }
 
   async get(collection, id) {
-    const db = await this.connect()
-    return db.collection(collection).findOne({ _id: Object(id) })
+    await this.connect()
+    return this.connection.collection(collection).findOne({ _id: Object(id) })
   }
 
   async create(collection, data) {
-    const db = await this.connect()
-    return db.collection(collection).insertOne(data).insertedId
+    await this.connect()
+    return this.connection.collection(collection).insertOne(data).insertedId
   }
 
   async update(collection, id, data) {
-    const db = await this.connect()
-    return db
+    await this.connect()
+    return this.connection
       .collection(collection)
       .updateOne({ _id: ObjectId(id) }, { $set: data })
   }
 
   async delete(collection, id) {
-    const db = await this.connect()
-    await db.collection(collection).deleteOne({ _id: ObjectId(id) })
+    await this.connect()
+    await this.connection.collection(collection).deleteOne({ _id: ObjectId(id) })
     return id
   }
 }

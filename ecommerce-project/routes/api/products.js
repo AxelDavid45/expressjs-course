@@ -2,6 +2,12 @@
 const express = require('express')
 const router = express.Router()
 const ProductsService = require('../../services/productServiceInjection')
+const {
+  productIdSchema,
+  productTagSchema,
+  createProductSchema,
+  updateProductSchema,
+} = require('../../database/schemas/products')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -30,8 +36,8 @@ router.get('/:productId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { body: product } = req
-    const productCreated = await ProductsService.createProduct({ product })
+    const { body } = req
+    const productCreated = await ProductsService.createProduct({ productData: body })
     res.status(201).json({
       data: productCreated,
     })
