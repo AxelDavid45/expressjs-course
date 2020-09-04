@@ -9,6 +9,12 @@ const config = {
     host: process.env.MONGOATLAS_HOST,
     name: process.env.MONGOATLAS_NAME,
   },
+  auth: {
+    adminUsername: process.env.AUTH_ADMIN_USERNAME,
+    adminPassword: process.env.AUTH_ADMIN_PASSWORD,
+    adminEmail: process.env.AUTH_ADMIN_EMAIL,
+    jwtSecret: process.env.AUTH_JWT_SECRET
+  }
 }
 
 module.exports = config

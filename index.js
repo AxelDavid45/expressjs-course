@@ -4,6 +4,7 @@ const { join } = require('path')
 const PORT = process.env.PORT || 3000
 const productsRoutes = require('./routes/views/products')
 const productApiRoutes = require('./routes/api/products')
+const authApiRoutes = require('./routes/api/auth')
 const errorHandlingMiddleware = require('./middleware/errorHandler')
 
 const app = express()
@@ -22,6 +23,7 @@ app.set('view engine', 'pug')
 app.get('/', (req, res) => {
   res.redirect('/products')
 })
+app.use('/api/auth', authApiRoutes)
 app.use('/products', productsRoutes)
 app.use('/api/products', productApiRoutes)
 
